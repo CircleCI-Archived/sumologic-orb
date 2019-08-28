@@ -30,7 +30,7 @@ jobs:
     docker:
       - image: cimg/node
     steps:
-      #- sumologic/job-collector
+      - sumologic/job-collector
       - run: echo "test"
 
 workflows:
