@@ -28,5 +28,5 @@ steps:
         mkdir -p /tmp/sumologic-logs/
         echo $SL_PAYLOAD > /tmp/sumologic-logs/job-colloector.json
         # Send data to SumoLogic
-        curl -v -X POST -T /tmp/sumologic-logs/job-colloector.json << parameters.http-source >>
+        curl -v -X POST -T /tmp/sumologic-logs/job-colloector.json $<< parameters.http-source >>
 
