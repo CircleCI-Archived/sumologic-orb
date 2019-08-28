@@ -5,7 +5,7 @@ parameters:
     type: env_var_name
     default: "CIRCLE_TOKEN"
     description: |
-      "The environment variable name containing your CircleCI Personal API token. 
+      "The environment variable name containing your CircleCI Personal API token.
       The API token is used to fetch additional analytics not present within the container.
       Generate yours here: https://circleci.com/account/api"
 steps:
