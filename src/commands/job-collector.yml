@@ -1,0 +1,19 @@
+description: >
+  "Collect data from this job and report to SumoLogic. Note: MUST BE LAST COMMAND IN JOB."
+parameters:
+  circle-token:
+    type: env_var_name
+    default: "CIRCLE_TOKEN"
+    description: |
+      "The environment variable name containing your CircleCI Personal API token. 
+      The API token is used to fetch additional analytics not present within the container.
+      Generate yours here: https://circleci.com/account/api"
+steps:
+  - run:
+      name: SumoLogic Job Collector
+      when: always
+      command: |
+        VCS_TYPE=$( echo $CIRCLE_BUILD_URL | cut -d'/' -f4)
+        ORG_NAME=$( echo $CIRCLE_BUILD_URL | cut -d'/' -f5)
+        PROJECT_NAME=$( echo $CIRCLE_BUILD_URL | cut -d'/' -f6)
+        curl https://circleci.com/api/v1.1/project/$VCS_TYPE/$ORG_NAME/$PROJECT_NAME/$CIRCLE_BUILD_NUM?circle-token=$<< parameters.circle-token >>
