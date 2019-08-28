@@ -23,8 +23,10 @@ steps:
         PROJECT_NAME=$( echo $CIRCLE_BUILD_URL | cut -d'/' -f6)
         # Fetch job data from API
         SL_PAYLOAD=$(curl https://circleci.com/api/v1.1/project/$VCS_TYPE/$ORG_NAME/$PROJECT_NAME/$CIRCLE_BUILD_NUM?circle-token=$<< parameters.circle-token >>)
+        echo $SL_PAYLOAD
         # Pre-Process data here if needed.
         # Write data to /tmp/sumologic-logs/job-colloector.json
+        mkdir -p /tmp/sumologic-logs/
         echo $SL_PAYLOAD > /tmp/sumologic-logs/job-colloector.json
         # Send data to SumoLogic
         curl -v -X POST -T /tmp/sumologic-logs/job-colloector.json -H 'Content-Encoding:gzip' << parameters.http-source >>
