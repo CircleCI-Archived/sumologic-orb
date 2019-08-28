@@ -21,23 +21,23 @@ steps:
         # Fetch job data from API
         WF_PAYLOAD=$(curl https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$<< parameters.circle-token >>)
         # Pre-Process data here if needed.
-        WORKFLOWLENGTH=$(echo $WF_PAYLOAD | jq length)
+        WORKFLOWLENGTH=$(echo "$WF_PAYLOAD" | jq length)
         #fetch job data for only this job.
         WF_LOOP=0
-        while [ $WF_LOOP -lt 2 ];
+        while [ $WF_LOOP -lt $WORKFLOWLENGTH ];
         do
-          JOBDATA=$(echo $WF_PAYLOAD | jq ".[][$WF_LOOP]")
-          JOBNUMBER=$(echo $JOBDATA | jq '.job_number')
-          echo $JOBNUMBER
-          if [ $JOBNUMBER = $CIRCLE_BUILD_NUM ];
+          JOBDATA=$(echo "$WF_PAYLOAD" | jq ".[][$WF_LOOP]")
+          JOBNUMBER=$(echo "$JOBDATA" | jq '.job_number')
+          echo "$JOBNUMBER"
+          if [ "$JOBNUMBER" = "$CIRCLE_BUILD_NUM" ];
           then
             echo "this is the correct job"
             break
           fi
-          WF_LOOP=$($WF_LOOP+1)
+          WF_LOOP=$($WF_LOOP + 1)
         done
         # Write data to /tmp/sumologic-logs/job-colloector.json
         mkdir -p /tmp/sumologic-logs/
-        echo $JOBDATA > /tmp/sumologic-logs/job-colloector.json
+        echo "$JOBDATA" > /tmp/sumologic-logs/job-colloector.json
         # Send data to SumoLogic
         curl -v -X POST -T /tmp/sumologic-logs/job-colloector.json $<< parameters.http-source >>
