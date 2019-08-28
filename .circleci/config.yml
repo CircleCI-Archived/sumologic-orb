@@ -36,7 +36,7 @@ jobs:
     docker:
       - image: cimg/node
     steps:
-      - run: 
+      - run:
           name: This command is designed to fail, to produce valid data for Sumo Logic
           command: exit 1
       - sumologic/job-collector

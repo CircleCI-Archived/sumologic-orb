@@ -25,7 +25,6 @@ steps:
         # Fetch job data from API
         SL_PAYLOAD=$(curl https://circleci.com/api/v1.1/project/$VCS_TYPE/$ORG_NAME/$PROJECT_NAME/$CIRCLE_BUILD_NUM?circle-token=$<< parameters.circle-token >>)
         # Pre-Process data here if needed.
-        
         # Write data to /tmp/sumologic-logs/job-colloector.json
         mkdir -p /tmp/sumologic-logs/
         echo $SL_PAYLOAD > /tmp/sumologic-logs/job-colloector.json
