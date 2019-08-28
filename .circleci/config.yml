@@ -30,7 +30,8 @@ jobs:
     docker:
       - image: cimg/node
     steps:
-      - sumologic/job-collector
+      #- sumologic/job-collector
+      - run: echo "test"
 
 workflows:
   # this `lint-pack_validate_publish-dev` workflow will run on any commit
