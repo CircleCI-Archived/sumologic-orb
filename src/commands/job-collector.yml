@@ -18,8 +18,6 @@ steps:
       name: SumoLogic Job Collector
       when: always
       command: |
-        # Get required Env Vars
-        
         # Fetch job data from API
         WF_PAYLOAD=$(curl https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$<< parameters.circle-token >>)
         # Pre-Process data here if needed.
