@@ -5,3 +5,5 @@ description: >
   Website: sumologic.com
   Repo: https://github.com/CircleCI-Public/sumologic-orb"
 
+orbs:
+  jq: circleci/jq@1.9.0

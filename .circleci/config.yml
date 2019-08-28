@@ -32,6 +32,14 @@ jobs:
     steps:
       - sumologic/job-collector
       - run: echo "test"
+  test-job-collector-fail:
+    docker:
+      - image: cimg/node
+    steps:
+      - run: 
+          name: This command is designed to fail, to produce valid data for Sumo Logic
+          command: exit 1
+      - sumologic/job-collector
 
 workflows:
   # this `lint-pack_validate_publish-dev` workflow will run on any commit
@@ -88,6 +96,9 @@ workflows:
     jobs:
       - test-job-collector:
           name: test-job-collector-integration
+          filters: *integration-dev_filters
+      - test-job-collector-fail:
+          name: test-job-collector-fail-integration
           filters: *integration-dev_filters
 
       - test-job-collector:
