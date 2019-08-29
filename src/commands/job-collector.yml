@@ -31,21 +31,30 @@ steps:
           echo "loop $WF_LOOP"
           JOBDATA=$(echo "$WF_PAYLOAD" | jq ".[][$WF_LOOP]")
           echo
-          echo "job data"
-          echo
+          echo "job data: "
           echo "$JOBDATA"
+          echo
+          echo "Checking Job Number"
           JOBNUMBER=$(echo "$JOBDATA" | jq '.job_number')
           echo
           echo "job number $JOBNUMBER"
+          echo "internal job number: $CIRCLE_BUILD_NUM"
+          echo "Checking if equal"
           if [ "$JOBNUMBER" = "$CIRCLE_BUILD_NUM" ];
           then
             echo "this is the correct job"
             break
           fi
+          echo "Trying next job in workflow. Data was not in $WF_LOOP"
           WF_LOOP=$[$WF_LOOP +1]
         done
         # Write data to /tmp/sumologic-logs/job-colloector.json
         mkdir -p /tmp/sumologic-logs/
-        echo "$JOBDATA" > /tmp/sumologic-logs/job-colloector.json
-        # Send data to SumoLogic
-        curl -v -X POST -T /tmp/sumologic-logs/job-colloector.json $<< parameters.http-source >>
+        if [ -z $JOBDATA ];
+        then
+          echo "$JOBDATA" > /tmp/sumologic-logs/job-colloector.json
+          # Send data to SumoLogic
+          curl -v -X POST -T /tmp/sumologic-logs/job-colloector.json $<< parameters.http-source >>
+        else
+          echo "Error: Job data was not found. Please consider opening an issue https://circleci.com/gh/CircleCI-Public/sumologic-orb"
+        fi
