@@ -22,7 +22,6 @@ steps:
         WF_PAYLOAD=$(curl https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$<< parameters.circle-token >>)
         # Pre-Process data here if needed.
         WORKFLOWLENGTH=$(echo "$WF_PAYLOAD" | jq length)
-        WORKFLOWLENGTH=$[ "$WORKFLOWLENGTH" -1 ]
         echo "WF length $WORKFLOWLENGTH"
         #fetch job data for only this job.
         WF_LOOP="0"
