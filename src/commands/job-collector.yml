@@ -24,13 +24,14 @@ steps:
         WORKFLOWLENGTH=$(echo "$WF_PAYLOAD" | jq length)
         echo "WF length $WORKFLOWLENGTH"
         #fetch job data for only this job.
-        WF_LOOP=0
-        while [ $WF_LOOP -lt $WORKFLOWLENGTH ];
+        WF_LOOP="0"
+        echo "Searching for job data"
+        while [ "$WF_LOOP" -lt "$WORKFLOWLENGTH" ];
         do
           echo "loop $WF_LOOP"
           JOBDATA=$(echo "$WF_PAYLOAD" | jq ".[][$WF_LOOP]")
           echo
-          echo "jobdata"
+          echo "job data"
           echo
           echo "$JOBDATA"
           JOBNUMBER=$(echo "$JOBDATA" | jq '.job_number')
@@ -41,7 +42,7 @@ steps:
             echo "this is the correct job"
             break
           fi
-          WF_LOOP=$($WF_LOOP + 1)
+          WF_LOOP=$[$WF_LOOP +1]
         done
         # Write data to /tmp/sumologic-logs/job-colloector.json
         mkdir -p /tmp/sumologic-logs/
