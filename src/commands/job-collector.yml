@@ -22,6 +22,7 @@ steps:
         WF_PAYLOAD=$(curl https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$<< parameters.circle-token >>)
         # Pre-Process data here if needed.
         WORKFLOWLENGTH=$(echo "$WF_PAYLOAD" | jq length)
+        WORKFLOWLENGTH=$[ "$WORKFLOWLENGTH" -1 ]
         echo "WF length $WORKFLOWLENGTH"
         #fetch job data for only this job.
         WF_LOOP="0"
@@ -40,7 +41,7 @@ steps:
           echo "job number $JOBNUMBER"
           echo "internal job number: $CIRCLE_BUILD_NUM"
           echo "Checking if equal"
-          if [ "$JOBNUMBER" = "$CIRCLE_BUILD_NUM" ];
+          if [ test "$JOBNUMBER" = "$CIRCLE_BUILD_NUM" ];
           then
             echo "this is the correct job"
             break
