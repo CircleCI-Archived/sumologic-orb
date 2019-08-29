@@ -40,7 +40,7 @@ steps:
           echo "job number $JOBNUMBER"
           echo "internal job number: $CIRCLE_BUILD_NUM"
           echo "Checking if equal"
-          if [ test "$JOBNUMBER" = "$CIRCLE_BUILD_NUM" ];
+          if test "$JOBNUMBER" = "$CIRCLE_BUILD_NUM" ;
           then
             echo "this is the correct job"
             break
