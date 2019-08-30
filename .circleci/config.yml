@@ -26,12 +26,18 @@ orbs:
   orb-tools: circleci/orb-tools@8.27.3
 
 jobs:
-  emulate_job:
+  emulate_job_1:
     docker:
       - image: cimg/node
     steps:
       - run: echo "This job serves to emulate a job in a workflow that takes some amount of time to complete."
       - run: sleep 20
+  emulate_job_2:
+    docker:
+      - image: cimg/node
+    steps:
+      - run: echo "This job serves to emulate a job in a workflow that takes some amount of time to complete."
+      - run: sleep 50
 
 workflows:
   # this `lint-pack_validate_publish-dev` workflow will run on any commit
@@ -86,11 +92,17 @@ workflows:
   # it is only triggered by git tags, which are created in the job above
   integration-tests_prod-release:
     jobs:
-      - emulate_job:
-          name: emulate-dev
+      - emulate_job_1:
+          name: emulate-dev_1
           filters: *integration-dev_filters
-      - emulate_job:
-          name: emulate-master
+      - emulate_job_1:
+          name: emulate-master_1
+          filters: *integration-master_filters
+      - emulate_job_2:
+          name: emulate-dev_2
+          filters: *integration-dev_filters
+      - emulate_job_2:
+          name: emulate-master_2
           filters: *integration-master_filters
       - sumologic/workflow-collector:
           name: workflow-collector-dev
