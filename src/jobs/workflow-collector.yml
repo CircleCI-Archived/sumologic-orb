@@ -36,6 +36,9 @@ steps:
           # the flag will then be set back to false.
           WF_FINISHED=true
           i="0"
+          ################
+          ### JOB LOOP ###
+          ################
           while [ $i -lt "$WF_LENGTH" ]
           do
             echo "looping: $i"
@@ -59,7 +62,7 @@ steps:
               else
                 # If it is still running, then mark WF_FINISHED as false.
                 WF_FINISHED=false
-                # wait before continuing to loop
+                echo "Setting status of WF_FINISHED to false"
               fi
             fi
             echo "rerunning loop"
@@ -67,9 +70,10 @@ steps:
             echo "increment loop to $i"
             echo " ---------- "
             echo
-            echo "waiting"
-            sleep 15
           done
+          echo "Waiting 10 seconds"
+          sleep 10
         done
+        echo
         echo "Complete"
-        exit 0
+
