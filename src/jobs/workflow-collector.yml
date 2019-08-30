@@ -30,6 +30,7 @@ steps:
         #####################
         while [ "$WF_FINISHED" = false ]
         do
+          WF_DATA=$(curl -s "$DATA_URL" | jq '.items')
           echo "Waiting for other jobs to finish..."
           # for each job in the workflow fetch the status.
           # the WF_FINISHED will be assumed true unless one of the jobs in the Workflow is still running
