@@ -40,7 +40,8 @@ steps:
           # Send Workflow Data to SumoLogic
           #####
           mkdir -p /tmp/sumologic-logs/
-          echo $WF_DATA > /tmp/sumologic-logs/workflow-collector.json
+          WF_SL_PAYLOAD=$(curl -s "$DATA_URL" | jq '.')
+          echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
           curl -v -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
           # for each job in the workflow fetch the status.
           # the WF_FINISHED will be assumed true unless one of the jobs in the Workflow is still running
