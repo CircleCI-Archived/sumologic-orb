@@ -70,6 +70,6 @@ steps:
             echo "waiting"
             sleep 15
           done
-          echo "Complete"
-          exit 0
         done
+        echo "Complete"
+        exit 0
