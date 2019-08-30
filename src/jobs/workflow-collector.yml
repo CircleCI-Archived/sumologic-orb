@@ -50,9 +50,8 @@ steps:
               echo "JOB: $JOB_NAME"
               echo "JOB NUM: $JOB_NUMBER"
               echo "STATUS: $JOB_STATUS"
-              # If the status is no longer running, assume complete.
-              diff <(echo "$JOB_STATUS") <(echo "running")
-              if [ "$JOB_STATUS" != "running" ];
+           
+              if [ "$JOB_STATUS" != '"running"' ];
               then
                 echo "Job $CIRCLE_JOB $JOB_NUMBER is complete - $JOB_STATUS"
               else
