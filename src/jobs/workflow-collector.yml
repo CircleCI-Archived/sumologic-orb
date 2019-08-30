@@ -38,7 +38,7 @@ steps:
           while [ $i -lt "$WF_LENGTH" ]
           do
             echo "looping: $i"
-            JOB_DATA=$(echo "$WF_DATA" | jq ".[][$i]")
+            JOB_DATA=$(echo "$WF_DATA" | jq --arg i "$i" ".[][$i]")
             echo "Job data:"
             echo "$JOB_DATA"
             JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
