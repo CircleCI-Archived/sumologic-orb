@@ -61,9 +61,10 @@ steps:
                 WF_FINISHED=false
                 # wait before continuing to loop
                 echo "waiting"
-                sleep 10
+                sleep 15
               fi
             fi
+            (( i++ ))
           done
           echo "Complete"
           exit 0
