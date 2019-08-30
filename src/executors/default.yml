@@ -1,0 +1,6 @@
+description: >
+  Default reporting environment for Sumologic. This is a small node based Docker image with a low resource class. Designed to load fast and use few credits.
+
+docker:
+  - image: cimg/node
+resource_class: small
