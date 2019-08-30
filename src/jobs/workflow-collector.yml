@@ -39,8 +39,6 @@ steps:
           do
             echo "looping: $i"
             JOB_DATA=$(echo "$WF_DATA" | jq --arg i "$i" ".items[$i]")
-            echo "Job data:"
-            echo "$JOB_DATA"
             JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
             JOB_STATUS=$(echo "$JOB_DATA" | jq ".status")
             echo "Job number: $JOB_NUMBER"
@@ -57,6 +55,6 @@ steps:
                 echo "Job $CIRCLE_JOB $JOB_NUMBER is complete"
               fi
             fi
-            i=$($i+1)
+            (( i++ ))
           done
         done
