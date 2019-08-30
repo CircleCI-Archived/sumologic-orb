@@ -1,9 +1,6 @@
 description: >
   "Add this job to any Workflow, it will run until the end of"
 parameters:
-  path:
-      type: string
-      description: absolute or relative path to the logfile you wish to upload.
   http-source:
       type: env_var_name
       default: "HTTP_SOURCE"
