@@ -11,10 +11,8 @@ steps:
   - run:
       name: Workflow Collector
       command: |
-        echo "debug 0"
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$CIRCLE_TOKEN"
         WF_DATA=$(curl -s "$DATA_URL" | jq '.items')
-        echo "$WF_DATA"
         WF_LENGTH=$(echo "$WF_DATA" | jq length)
         # Assume the WF is currently running
         WF_FINISHED=false
@@ -42,17 +40,16 @@ steps:
             JOB_DATA=$(echo "$WF_DATA" | jq --arg i "$i" ".[$i]")
             JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
             JOB_STATUS=$(echo "$JOB_DATA" | jq ".status")
-            echo "Job number: $JOB_NUMBER"
-            echo "Job status: $JOB_STATUS"
+            JOB_NAME=$(echo "$JOB_DATA" | jq ".name")
             # Only check the job if it is not this current job
-            echo "checking $JOB_NUMBER (fetched from data) vs $CIRCLE_BUILD_NUM (this job)"
             if [ "$JOB_NUMBER" = "$CIRCLE_BUILD_NUM" ];
             then
-              echo "This is the reporter job"
+              echo "This is the reporter job. Skipping"
             else
               # If this job is NOT the current job, check the status
-              echo "Checking the status of $JOB_NUMBER"
-              echo "status $JOB_STATUS"
+              echo "JOB: $JOB_NAME"
+              echo "JOB NUM: $JOB_NUMBER"
+              echo "STATUS: $JOB_STATUS"
               # If the status is no longer running, assume complete.
               if [ ! "$JOB_STATUS" = "running" ];
               then
@@ -68,6 +65,8 @@ steps:
             echo "rerunning loop"
             i="$((i+1))"
             echo "increment loop to $i"
+            echo " ---------- "
+            echo
           done
           echo "Complete"
           exit 0
