@@ -90,10 +90,10 @@ workflows:
           name: emulate-dev
           filters: *integration-dev_filters
       - emulate_job:
-          name: emulate-dev
+          name: emulate-master
           filters: *integration-master_filters
       - sumologic/workflow-collector:
-          name: workflow-collector-master
+          name: workflow-collector-dev
           filters: *integration-dev_filters
       - sumologic/workflow-collector:
           name: workflow-collector-master
