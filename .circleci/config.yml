@@ -22,7 +22,7 @@ prod-deploy_requires: &prod-deploy_requires
 # release must exist; you'll need to publish manually at least once)
 # you can use scripts/publish-alpha.sh to publish a @dev:alpha release
 orbs:
-  sumologic: circleci/sumologic@dev:Alpha
+  sumologic: circleci/sumologic@dev:alpha
   orb-tools: circleci/orb-tools@8.27.3
 
 jobs:
