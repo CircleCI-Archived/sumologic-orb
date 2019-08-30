@@ -14,6 +14,7 @@ steps:
         echo "debug 0"
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$CIRCLE_TOKEN"
         WF_DATA=$(curl -s "$DATA_URL" | jq '.')
+        echo "$WF_DATA"
         WF_LENGTH=$(echo "$WF_DATA" | jq length)
         # Assume the WF is currently running
         WF_FINISHED=false
@@ -44,7 +45,7 @@ steps:
             echo "Job number: $JOB_NUMBER"
             echo "Job status: $JOB_STATUS"
             # Only check the job if it is not this current job
-            echo "checking $JOB_NUMBER vs $CIRCLE_BUILD_NUM"
+            echo "checking $JOB_NUMBER (fetched from data) vs $CIRCLE_BUILD_NUM (this job)"
             if [ "$JOB_NUMBER" = "$CIRCLE_BUILD_NUM" ];
             then
               echo "This is the reporter job"
@@ -64,7 +65,9 @@ steps:
                 sleep 15
               fi
             fi
+            echo "rerunning loop"
             (( i++ ))
+            echo "increment loop to $i"
           done
           echo "Complete"
           exit 0
