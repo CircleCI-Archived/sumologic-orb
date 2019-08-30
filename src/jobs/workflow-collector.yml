@@ -11,9 +11,11 @@ steps:
   - run:
       command: |
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$CIRCLE_TOKEN"
-        echo $(curl "$DATA_URL")
-        WF_LENGTH=$(curl "$DATA_URL" | jq length)
-        echo "Length: WF_LENGTH"
+        WF_DATA=$(curl -s "$DATA_URL")
+        echo "Workflow:"
+        echo "$WF_DATA"
+        WF_LENGTH=$(echo "$WF_DATA" | jq  length)
+        echo "Length: $WF_LENGTH"
         if [ "$WF_LENGTH" -lt 2 ];
         # Exit if no other jobs in the Workflow.
         then
@@ -34,10 +36,13 @@ steps:
           while [ $i -lt "$WF_LENGTH" ]
           do
             echo "looping: $i"
-            JOB_DATA=$(curl "$DATA_URL" | jq ".[][$i]")
+            JOB_DATA=$(echo "$WF_DATA" | jq ".[][$i]")
+            echo "Job data"
+            echo "$JOB_DATA"
             JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
             JOB_STATUS=$(echo "$JOB_DATA" | jq ".status")
             echo "Job number: $JOB_NUMBER"
+            echo "Job status: $JOB_STATUS"
             # check Job number and set WF_FINISHED value
             # Only check the job if it is not this current job
             if [ ! "$JOB_NUMBER" = "$CIRCLE_BUILD_NUM" ];
