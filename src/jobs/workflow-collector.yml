@@ -11,7 +11,9 @@ steps:
   - run:
       command: |
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$CIRCLE_TOKEN"
+        echo $(curl "$DATA_URL")
         WF_LENGTH=$(curl "$DATA_URL" | jq length)
+        echo "Length: WF_LENGTH"
         if [ "$WF_LENGTH" -lt 2 ];
         # Exit if no other jobs in the Workflow.
         then
@@ -23,6 +25,7 @@ steps:
         # Check the status of all jobs in the workflow that are not this job and wait until they have all finished.
         while [ "$WF_FINISHED" = false ]
         do
+          echo "Waiting for other jobs to finish..."
           # for each job in the workflow fetch the status.
           # the WF_FINISHED will be assumed true unless one of the jobs in the Workflow is still running
           # the flag will then be set back to false.
