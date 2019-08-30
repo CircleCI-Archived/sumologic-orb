@@ -13,10 +13,10 @@ steps:
       command: |
         echo "debug 0"
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$CIRCLE_TOKEN"
-        WF_DATA=$(curl -s "$DATA_URL")
+        WF_DATA=$(curl -s "$DATA_URL" | jq '.')
         echo "Workflow:"
         echo "$WF_DATA"
-        WF_LENGTH=$(echo "$WF_DATA" | jq  length)
+        WF_LENGTH=$(echo "$WF_DATA" | jq length)
         echo "Length: $WF_LENGTH"
         if [ "$WF_LENGTH" -lt 2 ];
         # Exit if no other jobs in the Workflow.
@@ -38,7 +38,7 @@ steps:
           while [ $i -lt "$WF_LENGTH" ]
           do
             echo "looping: $i"
-            JOB_DATA=$(echo "$WF_DATA" | jq --arg i "$i" ".[][$i]")
+            JOB_DATA=$(echo "$WF_DATA" | jq --arg i "$i" ".items[$i]")
             echo "Job data:"
             echo "$JOB_DATA"
             JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
