@@ -17,6 +17,7 @@ steps:
         # Assume the WF is currently running
         WF_FINISHED=false
         echo "Jobs in Workflow: $WF_LENGTH"
+        echo
         if [ "$WF_LENGTH" -lt 2 ];
         # Exit if no other jobs in the Workflow.
         then
@@ -25,6 +26,8 @@ steps:
           exit 1
         fi
         # Check the status of all jobs in the workflow that are not this job and wait until they have all finished.
+        ## START MAIN LOOP ##
+        #####################
         while [ "$WF_FINISHED" = false ]
         do
           echo "Waiting for other jobs to finish..."
@@ -57,8 +60,6 @@ steps:
                 # If it is still running, then mark WF_FINISHED as false.
                 WF_FINISHED=false
                 # wait before continuing to loop
-                echo "waiting"
-                sleep 15
               fi
             fi
             echo "rerunning loop"
@@ -66,6 +67,8 @@ steps:
             echo "increment loop to $i"
             echo " ---------- "
             echo
+            echo "waiting"
+            sleep 15
           done
           echo "Complete"
           exit 0
