@@ -15,7 +15,7 @@ integration-master_filters: &integration-master_filters
 
 prod-deploy_requires: &prod-deploy_requires
   [
-    test-job-collector-master
+    workflow-collector-master
   ]
 
 # add your orb below, to be used in integration tests (note: a @dev:alpha
@@ -26,20 +26,12 @@ orbs:
   orb-tools: circleci/orb-tools@8.27.3
 
 jobs:
-  test-job-collector:
+  emulate_job:
     docker:
       - image: cimg/node
     steps:
-      - sumologic/job-collector
-      - run: echo "test"
-  test-job-collector-fail:
-    docker:
-      - image: cimg/node
-    steps:
-      - run:
-          name: This command is designed to fail, to produce valid data for Sumo Logic
-          command: exit 1
-      - sumologic/job-collector
+      - run: echo "This job serves to emulate a job in a workflow that takes some amount of time to complete."
+      - run: sleep 20
 
 workflows:
   # this `lint-pack_validate_publish-dev` workflow will run on any commit
@@ -94,17 +86,18 @@ workflows:
   # it is only triggered by git tags, which are created in the job above
   integration-tests_prod-release:
     jobs:
-      - test-job-collector:
-          name: test-job-collector-integration
+      - emulate_job:
+          name: emulate-dev
           filters: *integration-dev_filters
-      - test-job-collector-fail:
-          name: test-job-collector-fail-integration
-          filters: *integration-dev_filters
-
-      - test-job-collector:
-          name: test-job-collector-master
+      - emulate_job:
+          name: emulate-dev
           filters: *integration-master_filters
-
+      - sumologic/workflow-collector:
+          name: workflow-collector-master
+          filters: *integration-dev_filters
+      - sumologic/workflow-collector:
+          name: workflow-collector-master
+          filters: *integration-master_filters
       - orb-tools/dev-promote-prod:
           name: dev-promote-patch
           orb-name: circleci/orb-tools
