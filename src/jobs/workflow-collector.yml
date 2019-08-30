@@ -43,6 +43,11 @@ steps:
             echo "Job status: $JOB_STATUS"
             # check Job number and set WF_FINISHED value
             # Only check the job if it is not this current job
+            echo "checking $JOB_NUMBER vs $CIRCLE_BUILD_NUM"
+            if [ "$JOB_NUMBER" = "$CIRCLE_BUILD_NUM" ];
+            then
+              echo "This is the reporter job"
+            fi
             if [ ! "$JOB_NUMBER" = "$CIRCLE_BUILD_NUM" ];
             then
               echo "Checking the status of $JOB_NUMBER"
