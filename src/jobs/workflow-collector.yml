@@ -37,7 +37,7 @@ steps:
           do
             echo "looping: $i"
             JOB_DATA=$(echo "$WF_DATA" | jq ".[][$i]")
-            echo "Job data"
+            echo "Job data:"
             echo "$JOB_DATA"
             JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
             JOB_STATUS=$(echo "$JOB_DATA" | jq ".status")
