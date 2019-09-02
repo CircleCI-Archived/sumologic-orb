@@ -72,6 +72,10 @@ steps:
               # Send Job Data to SumoLogic
               #####
               mkdir -p /tmp/sumologic-logs/
+              ###
+              # Process Job api 1.1 Data
+              ###
+              JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
               echo $WF_DATA > /tmp/sumologic-logs/job-collector.json
               curl -v -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
@@ -94,5 +98,19 @@ steps:
           sleep 10
         done
         echo
-        echo "Complete"
-
+        #############
+        # COMPLETE  #
+        #############
+        echo "All jobs in Workflow complete."
+        echo "Sending final report."
+        #####
+        # Send end-of-workflow data to Sumologic
+        #####
+        mkdir -p /tmp/sumologic-logs/
+        WF_SL_PAYLOAD=$(curl -s "$DATA_URL" | jq '.')
+        echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
+        curl -v -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
+        #####
+        # Send end-of-workflow jobs to Sumologic
+        #####
+        # Add soon. Must fetch each job from workflow like above.
