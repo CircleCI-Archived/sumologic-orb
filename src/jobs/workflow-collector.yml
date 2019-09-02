@@ -76,7 +76,7 @@ steps:
               # Process Job api 1.1 Data
               ###
               JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
-              echo $WF_DATA > /tmp/sumologic-logs/job-collector.json
+              echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
               curl -v -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
               if [ "$JOB_STATUS" != '"running"' ];
@@ -98,11 +98,15 @@ steps:
           sleep 10
         done
         echo
-        #############
-        # COMPLETE  #
-        #############
+        ################
+        # WF COMPLETE  #
+        ################
+        echo
+        echo
         echo "All jobs in Workflow complete."
         echo "Sending final report."
+        echo
+        echo
         #####
         # Send end-of-workflow data to Sumologic
         #####
@@ -111,6 +115,42 @@ steps:
         echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
         curl -v -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
         #####
-        # Send end-of-workflow jobs to Sumologic
+        # Send end-of-workflow jobs data to Sumologic
         #####
         # Add soon. Must fetch each job from workflow like above.
+        i=0
+        while [ $i -lt "$WF_LENGTH" ]
+          do
+            echo "looping: $i"
+            # fetch the job info
+            JOB_DATA=$(echo "$WF_DATA" | jq --arg i "$i" ".[$i]")
+            JOB_NUMBER=$(echo "$JOB_DATA" | jq ".job_number")
+            JOB_STATUS=$(echo "$JOB_DATA" | jq ".status")
+            JOB_NAME=$(echo "$JOB_DATA" | jq ".name")
+            # Only check the job if it is not this current job
+            if [ "$JOB_NUMBER" = "$CIRCLE_BUILD_NUM" ];
+            then
+              echo "This is the reporter job. Skipping"
+            else
+              # If this job is NOT the current job, check the status
+              echo "JOB: $JOB_NAME"
+              echo "JOB NUM: $JOB_NUMBER"
+              echo "STATUS: $JOB_STATUS"
+              #####
+              # Send Job Data to SumoLogic
+              #####
+              mkdir -p /tmp/sumologic-logs/
+              ###
+              # Process Job api 1.1 Data
+              ###
+              JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
+              echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
+              curl -v -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
+              ###
+            fi
+            echo "rerunning loop"
+            i="$((i+1))"
+            echo "increment loop to $i"
+            echo " ---------- "
+            echo
+          done
