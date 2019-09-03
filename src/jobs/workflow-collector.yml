@@ -84,7 +84,7 @@ steps:
               ###
               # Process Job api 1.1 Data
               ###
-              JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
+              JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
               echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
               curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
@@ -152,7 +152,10 @@ steps:
               ###
               # Process Job api 1.1 Data
               ###
-              JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
+              JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
+              # debug
+              echo debug
+              echo $$JOB_DATA_RAW 
               echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
               curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
