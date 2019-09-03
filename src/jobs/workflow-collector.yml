@@ -99,8 +99,10 @@ steps:
                   exit 1
                   ;;
               esac
-
-              JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
+              echo
+              echo JOB DATA URL
+              echo "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token="
+              # JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
               echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
               curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
