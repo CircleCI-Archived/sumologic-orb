@@ -21,6 +21,19 @@ steps:
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$CIRCLE_TOKEN"
         WF_DATA=$(curl -s "$DATA_URL" | jq '.items')
         WF_LENGTH=$(echo "$WF_DATA" | jq length)
+        # GET URL PATH DATA
+        VCS_SHORT=$(echo $CIRCLE_BUILD_URL | cut -d"/" -f4)
+        case $VCS_SHORT in
+          gh)
+            VCS=github
+            ;;
+          bb)
+            VCS=bitbucket
+            ;;
+          *)
+            echo "No VCS found. Error"
+            exit 1
+            ;;
         # Assume the WF is currently running
         WF_FINISHED=false
         echo "Jobs in Workflow: $WF_LENGTH"
@@ -85,19 +98,6 @@ steps:
               ###
               # Process Job api 1.1 Data
               ###
-              # GET URL PATH DATA
-              VCS_SHORT=$(echo $CIRCLE_BUILD_URL | cut -d"/" -f4)
-              case $VCS_SHORT in
-                gh)
-                  VCS=github
-                  ;;
-                bb)
-                  VCS=bitbucket
-                  ;;
-                *)
-                  echo "No VCS found. Error"
-                  exit 1
-                  ;;
               esac
               echo
               echo JOB DATA URL
@@ -174,7 +174,7 @@ steps:
               ###
               # Process Job api 1.1 Data
               ###
-              JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/:vcs-type/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
+              JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
               # debug
               echo debug
               echo "---"
