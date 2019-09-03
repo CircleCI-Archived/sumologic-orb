@@ -48,7 +48,7 @@ steps:
           mkdir -p /tmp/sumologic-logs/
           WF_SL_PAYLOAD=$(curl -s "$DATA_URL" | jq '.')
           echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
-          curl -v -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
+          curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
           # for each job in the workflow fetch the status.
           # the WF_FINISHED will be assumed true unless one of the jobs in the Workflow is still running
           # the flag will then be set back to false.
@@ -86,7 +86,7 @@ steps:
               ###
               JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
               echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
-              curl -v -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
+              curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
               if [ "$JOB_STATUS" != '"running"' ];
               then
@@ -122,7 +122,7 @@ steps:
         mkdir -p /tmp/sumologic-logs/
         WF_SL_PAYLOAD=$(curl -s "$DATA_URL" | jq '.')
         echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
-        curl -v -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
+        curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
         #####
         # Send end-of-workflow jobs data to Sumologic
         #####
@@ -154,7 +154,7 @@ steps:
               ###
               JOB_DATA_RAW=$(curl "https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/$JOB_NUMBER?circle-token=$CIRCLE_TOKEN")
               echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
-              curl -v -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
+              curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
             fi
             echo "rerunning loop"
