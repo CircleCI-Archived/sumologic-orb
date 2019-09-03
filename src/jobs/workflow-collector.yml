@@ -34,6 +34,7 @@ steps:
             echo "No VCS found. Error"
             exit 1
             ;;
+        esac
         # Assume the WF is currently running
         WF_FINISHED=false
         echo "Jobs in Workflow: $WF_LENGTH"
