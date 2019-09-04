@@ -31,8 +31,7 @@ steps:
             VCS=bitbucket
             ;;
           *)
-            echo "No VCS found. Error"
-            exit 1
+            echo "No VCS found. Error" && exit 1
             ;;
         esac
         # Assume the WF is currently running
