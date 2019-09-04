@@ -14,5 +14,5 @@ steps:
       when: always
       command: |
         # Send data to SumoLogic
-        curl -v -X POST -T << parameters.path >> $<< parameters.http-source >>
+        curl -s -X POST -T << parameters.path >> $<< parameters.http-source >>
 
