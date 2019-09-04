@@ -23,14 +23,6 @@ steps:
         WF_LENGTH=$(echo "$WF_DATA" | jq length)
         # GET URL PATH DATA
         VCS_SHORT=$(echo $CIRCLE_BUILD_URL | cut -d"/" -f4)
-        case $VCS_SHORT in
-          gh)
-            VCS=github
-            ;;
-          bb)
-            VCS=bitbucket
-            ;;
-        esac
         # Assume the WF is currently running
         WF_FINISHED=false
         echo "Jobs in Workflow: $WF_LENGTH"
