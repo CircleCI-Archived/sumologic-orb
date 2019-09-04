@@ -23,6 +23,17 @@ steps:
         WF_LENGTH=$(echo "$WF_DATA" | jq length)
         # GET URL PATH DATA
         VCS_SHORT=$(echo $CIRCLE_BUILD_URL | cut -d"/" -f4)
+        case $VCS_SHORT in
+          gh)
+            VCS=github
+            ;;
+          bb)
+            VCS=bitbucket
+            ;;
+          *)
+            echo "No VCS found. Error" && exit 1
+            ;;
+        esac
         # Assume the WF is currently running
         WF_FINISHED=false
         echo "Jobs in Workflow: $WF_LENGTH"
@@ -87,7 +98,6 @@ steps:
               ###
               # Process Job api 1.1 Data
               ###
-              esac
               echo
               echo JOB DATA URL
               echo "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token="
