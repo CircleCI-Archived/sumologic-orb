@@ -37,9 +37,7 @@ jobs:
       - image: cimg/node
     steps:
       - run: echo "This job serves to emulate a job in a workflow that takes some amount of time to complete."
-      - run: echo "Failing on purpose for testing."
       - run: sleep 50
-      - run: exit 1
 
 workflows:
   # this `lint-pack_validate_publish-dev` workflow will run on any commit
