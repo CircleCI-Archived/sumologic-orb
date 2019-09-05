@@ -32,12 +32,14 @@ jobs:
     steps:
       - run: echo "This job serves to emulate a job in a workflow that takes some amount of time to complete."
       - run: sleep 20
+      - run: exit 1
   emulate_job_2:
     docker:
       - image: cimg/node
     steps:
       - run: echo "This job serves to emulate a job in a workflow that takes some amount of time to complete."
       - run: sleep 50
+      - run: exit 1
 
 
 workflows:
