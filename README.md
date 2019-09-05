@@ -2,6 +2,6 @@
 
 Easily capture analytics from your CircleCI jobs in your Sumologic dashboard!
 
-## job-collector
-A command to add to the end of any job to automatically report job-level analytics.
+## workflow-collector
+Add this job to your workflow qith no require statements. This job will run in parallel with the rest of your workflow for monitoring and will exit when all other jobs have completed.
 
