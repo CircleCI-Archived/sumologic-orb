@@ -15,7 +15,8 @@ integration-master_filters: &integration-master_filters
 
 prod-deploy_requires: &prod-deploy_requires
   [
-    workflow-collector-master
+    emulate-master_2,
+    emulate-master_1
   ]
 
 # add your orb below, to be used in integration tests (note: a @dev:alpha
