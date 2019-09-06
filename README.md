@@ -1,4 +1,5 @@
 # Sumologic Orb
+https://circleci.com/orbs/registry/orb/circleci/sumologic
 
 Easily capture analytics from your CircleCI jobs in your Sumologic dashboard!
 
