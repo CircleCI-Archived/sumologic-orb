@@ -1,9 +1,9 @@
 version: 2.1
 
 description: >
-  Sample orb description
-  # What will your orb allow users to do?
-  # Descriptions should be short, simple, and clear.
+  "Report CircleCI job analytics to your SumoLogic dashboard.
+  Website: sumologic.com
+  Repo: https://github.com/CircleCI-Public/sumologic-orb"
 
 orbs:
-  hello: circleci/hello-build@0.0.5 # Sample imported orb
+  jq: circleci/jq@1.9.0
