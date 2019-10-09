@@ -1,6 +1,17 @@
 description: >
   Default reporting environment for Sumologic. This is a small Ubuntu based Docker image with a low resource class. Designed to load fast and use few credits.
 
+parameters:
+  image:
+    type: string
+    default: "cimg/base"
+    description: Docker image name
+  tag:
+    type: string
+    default: "stable"
+    description: Docker image tag
+
 docker:
-  - image: cimg/base
+  - image: <<parameters.image>>:<<parameters.tag>>
+
 resource_class: small
