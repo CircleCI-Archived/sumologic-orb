@@ -139,11 +139,14 @@ steps:
         ########################################
         # Send end-of-workflow data to Sumologic
         ########################################
-        WF_SL_PAYLOAD=$(curl -s "https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID?circle-token=$<< parameters.circle-token >>" | jq '.')
-        echo "SENDING FINAL WORKFLOW DATA"
-        echo $WF_SL_PAYLOAD
-        echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
-        curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
+        WF_SL_PAYLOAD_STATUS=$(curl -I "https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID?circle-token=$<< parameters.circle-token >>" > /tmp/sumologic-logs/workflow-collector.json | head -n 1 | cut -d$' ' -f2)
+
+        if [ $WF_SL_PAYLOAD_STATUS -ge "200" && $WF_SL_PAYLOAD_STATUS -le "299" ]; then
+          echo "SENDING FINAL WORKFLOW DATA"
+          curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
+        else
+          echo "Getting previous workflow status failed with status $WF_SL_PAYLOAD_STATUS"
+        fi
         ########################################
         # Send end-of-workflow jobs data to Sumologic
         ########################################
