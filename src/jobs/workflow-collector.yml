@@ -107,9 +107,9 @@ steps:
               # echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
               # curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
-              if [ "$JOB_STATUS" != '"running"' ];
+              if [ "$JOB_STATUS" == '"success"' ] || [ "$JOB_STATUS" == '"failed"' ];
               then
-                echo "Job $CIRCLE_JOB $JOB_NUMBER is complete - $JOB_STATUS"
+                echo "Job $JOB_NAME $JOB_NUMBER is complete - $JOB_STATUS"
               else
                 # If it is still running, then mark WF_FINISHED as false.
                 WF_FINISHED=false
