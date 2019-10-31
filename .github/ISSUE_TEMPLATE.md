@@ -1,4 +1,4 @@
-### Orb version
+### specify Orb version
 
 <!---
   e.g., 1.0.0
@@ -8,7 +8,7 @@
   any job page, for the orb's specific semantic version number
 -->
 
-### What happened
+### What happened?
 
 <!---
   please include any relevant links to CircleCI workflows or jobs
