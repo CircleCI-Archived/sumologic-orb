@@ -1,10 +1,10 @@
 ### Checklist
 
-<!--
-	thank you for contributing to CircleCI Orbs!
-	before submitting your request, please go through the following
-	items and place an x in the [ ] if they have been completed
--->
+
+thank you for contributing to CircleCI Orbs!
+before submitting your request, please go through the following
+items and place an x in the [ ] if they have been completed
+
 
 - [ ] All new jobs, commands, executors, parameters have descriptions
 - [ ] Examples have been added for any significant new features
@@ -12,11 +12,12 @@
 
 ### Motivation, issues
 
-<!---
-	why is this change required? what problem does it solve?
+
+  why is this change required? 
+  what problem does it solve?
   paste links to any relevant GitHub issues filed against
-  this repository that this pull request addresses
--->
+  the repository that this pull request addresses
+
 
 ### Description
 
