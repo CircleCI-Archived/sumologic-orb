@@ -22,7 +22,7 @@ steps:
         ###############
         # Begin Collecting
         ###############
-        DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/jobs?circle-token=$<< parameters.circle-token >>"
+        DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/job?circle-token=$<< parameters.circle-token >>"
         WF_DATA=$(curl -s "$DATA_URL" | jq '.items')
         WF_LENGTH=$(echo "$WF_DATA" | jq length)
         # GET URL PATH DATA
