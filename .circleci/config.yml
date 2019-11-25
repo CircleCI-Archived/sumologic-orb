@@ -116,7 +116,7 @@ workflows:
           filters: *integration-master_filters
       - orb-tools/dev-promote-prod:
           name: dev-promote-patch
-          orb-name: circleci/orb-tools
+          orb-name: circleci/sumologic
           ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
           cleanup-tags: true
           requires: *prod-deploy_requires
@@ -129,7 +129,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: dev-promote-minor
           release: minor
-          orb-name: circleci/orb-tools
+          orb-name: circleci/sumologic
           ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
           cleanup-tags: true
           requires: *prod-deploy_requires
@@ -142,7 +142,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: dev-promote-major
           release: major
-          orb-name: circleci/orb-tools
+          orb-name: circleci/sumologic
           ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
           cleanup-tags: true
           requires: *prod-deploy_requires
