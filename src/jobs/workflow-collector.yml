@@ -23,8 +23,17 @@ steps:
         # Begin Collecting
         ###############
         DATA_URL="https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID/job?circle-token=$<< parameters.circle-token >>"
-        WF_DATA=$(curl -s "$DATA_URL" | jq '.items')
-        WF_LENGTH=$(echo "$WF_DATA" | jq length)
+        WF_DATA=$(curl -s "$DATA_URL")
+        WF_MESSAGE=$(echo "$WF_DATA" | jq '.message')
+        # Exit if no Workflow.
+        if [ "$WF_MESSAGE" = "\"Workflow not found\"" ];
+        then
+          echo "No Workflow was found."
+          echo "Your circle-token parameter may be wrong or you do not have access to this Workflow."
+          exit 1
+        fi
+        WF_ITEMS=$(echo "$WF_DATA" | jq '.items')
+        WF_LENGTH=$(echo "$WF_ITEMS" | jq length)
         # GET URL PATH DATA
         VCS_SHORT=$(echo $CIRCLE_BUILD_URL | cut -d"/" -f4)
         case $VCS_SHORT in
