@@ -182,15 +182,21 @@ steps:
               ###
               # Process Job api 1.1 Data
               ###
-              JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$<< parameters.circle-token >>")
-              # removing steps and circle_yml keys from object
-              JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq 'del(.circle_yml)' | jq 'del(.steps)')
-              # manually set job name as it is currently null
-              JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
-              # Write the modified data to a file
-              echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
-              curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
-              ###
+              # If $JOB_NUMBER is null, probably Approval Job. Don't process and send.
+              if [ "$JOB_NUMBER" = "null" ];
+              then
+                echo "Approval Job, skipping"
+              else
+                JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$<< parameters.circle-token >>")
+                # removing steps and circle_yml keys from object
+                JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq 'del(.circle_yml)' | jq 'del(.steps)')
+                # manually set job name as it is currently null
+                JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
+                # Write the modified data to a file
+                echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
+                curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
+                ###
+              fi
             fi
             echo "rerunning loop"
             i="$((i+1))"
