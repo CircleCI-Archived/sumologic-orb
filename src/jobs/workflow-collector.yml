@@ -119,9 +119,9 @@ steps:
               if [ "$JOB_STATUS" == '"success"' ] || [ "$JOB_STATUS" == '"failed"' ];
               then
                 echo "Job $JOB_NAME $JOB_NUMBER is complete - $JOB_STATUS"
-              elif [ "$JOB_STATUS" == '"on_hold"' ];
+              elif [ "$JOB_STATUS" == '"on_hold"' ] || [ "$JOB_STATUS" == '"blocked"' ];
               then
-                # The condition to not block metrics sending when workflow use manually approved steps.
+                # The condition to not block metrics sending when workflow use manually approved steps or is blocked.
                 echo "Job $JOB_NAME $JOB_NUMBER need manual approval - $JOB_STATUS - skipping"
               else
                 # If it is still running, then mark WF_FINISHED as false.
