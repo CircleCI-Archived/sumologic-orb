@@ -49,14 +49,13 @@ steps:
         esac
         # Assume the WF is currently running
         WF_FINISHED=false
-        echo "Jobs in Workflow: $WF_LENGTH"
-        echo
+        echo -e "Jobs in Workflow: $WF_LENGTH \n"
         # Exit if no other jobs in the Workflow.
         if [ "$WF_LENGTH" -lt 2 ];
         then
           echo "Only a single job has been found in the workflow, indicating this reporter is the only job in the pipeline."
           echo "Please add other jobs to the Workflow you wish to collect data on to send to Sumologic"
-          exit 1
+          exit 0
         fi
         #####################
         ## START MAIN LOOP ##
