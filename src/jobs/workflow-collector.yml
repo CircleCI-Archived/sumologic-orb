@@ -70,7 +70,7 @@ steps:
           #####
           mkdir -p /tmp/sumologic-logs/
           WF_SL_PAYLOAD=$(curl -s "$DATA_URL" | jq '.')
-          echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
+          echo "$WF_SL_PAYLOAD" > /tmp/sumologic-logs/workflow-collector.json
           curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
           # for each job in the workflow fetch the status.
           # the WF_FINISHED will be assumed true unless one of the jobs in the Workflow is still running
@@ -110,9 +110,9 @@ steps:
               # echo "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER"
               # JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$<< parameters.circle-token >>")
               # # removing steps,circle_yml, outcome keys from object while the workflow is incomplete.
-              # JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq 'del(.circle_yml)' | jq 'del(.steps)')
+              # JOB_DATA_RAW=$(echo "$JOB_DATA_RAW" | jq 'del(.circle_yml)' | jq 'del(.steps)')
               # # Write the modified data to a file
-              # echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
+              # echo "$JOB_DATA_RAW" > /tmp/sumologic-logs/job-collector.json
               # curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
               ###
               if [ "$JOB_STATUS" == '"success"' ] || [ "$JOB_STATUS" == '"failed"' ];
@@ -153,8 +153,8 @@ steps:
         ########################################
         WF_SL_PAYLOAD=$(curl -s "https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID?circle-token=$<< parameters.circle-token >>" | jq '.')
         echo "SENDING FINAL WORKFLOW DATA"
-        echo $WF_SL_PAYLOAD
-        echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
+        echo "$WF_SL_PAYLOAD"
+        echo "$WF_SL_PAYLOAD" > /tmp/sumologic-logs/workflow-collector.json
         curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
         ########################################
         # Send end-of-workflow jobs data to Sumologic
@@ -192,11 +192,11 @@ steps:
               else
                 JOB_DATA_RAW=$(curl -s "https://circleci.com/api/v1.1/project/$VCS/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$JOB_NUMBER?circle-token=$<< parameters.circle-token >>")
                 # removing steps and circle_yml keys from object
-                JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq 'del(.circle_yml)' | jq 'del(.steps)')
+                JOB_DATA_RAW=$(echo "$JOB_DATA_RAW" | jq 'del(.circle_yml)' | jq 'del(.steps)')
                 # manually set job name as it is currently null
-                JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
+                JOB_DATA_RAW=$(echo "$JOB_DATA_RAW" | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
                 # Write the modified data to a file
-                echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
+                echo "$JOB_DATA_RAW" > /tmp/sumologic-logs/job-collector.json
                 curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
                 ###
               fi
