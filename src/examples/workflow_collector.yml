@@ -24,6 +24,8 @@ usage:
     build-test-and-deploy:
       jobs:
         - sumologic/workflow-collector
+            custom-data: >
+              {"foo": "bar", "$SOME_KEY_VAR": "$SOME_VALUE_VAR"}
         - build
         - test:
             requires:
