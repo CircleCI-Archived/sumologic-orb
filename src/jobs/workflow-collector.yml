@@ -159,7 +159,7 @@ steps:
 
         # Append any custom data to the workflow data
         ESCAPED_JSON=$(echo '<< parameters.custom-data >>' | sed -E 's/([^\]|^)"/\1\\"/g')
-        CUSTOM_DATA=$(eval "echo $ESCAPED_JSON")`
+        CUSTOM_DATA=$(eval "echo $ESCAPED_JSON")
         if [[ ! -z '<< parameters.custom-data >>' ]] && echo "$CUSTOM_DATA" | jq -e;
         then
             echo "Appending custom data to the workflow data"
