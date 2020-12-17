@@ -13,6 +13,10 @@ parameters:
       type: env_var_name
       default: "CIRCLE_TOKEN"
       description: "Enter your CircleCI Personal Access Token for interacting with the API. You may generate one here: https://circleci.com/account/api"
+  custom-data:
+      type: string
+      default: ""
+      description: "A valid JSON object to append to the workflow data."
 executor: default
 steps:
   - jq/install
@@ -152,6 +156,18 @@ steps:
         # Send end-of-workflow data to Sumologic
         ########################################
         WF_SL_PAYLOAD=$(curl -s "https://circleci.com/api/v2/workflow/$CIRCLE_WORKFLOW_ID?circle-token=$<< parameters.circle-token >>" | jq '.')
+
+        # Append any custom data to the workflow data
+        ESCAPED_JSON=$(echo '<< parameters.custom-data >>' | sed -E 's/([^\]|^)"/\1\\"/g')
+        CUSTOM_DATA=$(eval "echo $ESCAPED_JSON")
+        if [[ ! -z '<< parameters.custom-data >>' ]] && echo "$CUSTOM_DATA" | jq -e;
+        then
+            echo "Appending custom data to the workflow data"
+            WF_SL_PAYLOAD=$(echo $WF_SL_PAYLOAD | jq -c ". +  {\"custom_data\": $CUSTOM_DATA}")
+        else
+            echo "No valid custom data found to append to the workflow data"
+        fi
+
         echo "SENDING FINAL WORKFLOW DATA"
         echo $WF_SL_PAYLOAD
         echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
