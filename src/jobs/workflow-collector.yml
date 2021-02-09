@@ -211,6 +211,16 @@ steps:
                 JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq 'del(.circle_yml)' | jq 'del(.steps)')
                 # manually set job name as it is currently null
                 JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
+
+                # Append any custom data to the job data
+                if [[ ! -z '<< parameters.custom-data >>' ]] && echo "$CUSTOM_DATA" | jq -e;
+                then
+                    echo "Appending custom data to the workflow data"
+                    JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq -c ". +  {\"custom_data\": $CUSTOM_DATA}")
+                else
+                    echo "No valid custom data found to append to the job data"
+                fi
+
                 # Write the modified data to a file
                 echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
                 curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
