@@ -72,7 +72,7 @@ workflows:
       # key in CircleCI via SSH Permissions, with github.com as Hostname)
       - orb-tools/trigger-integration-workflow:
           name: trigger-integration-dev
-          ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
+          ssh-fingerprints: 07:33:2a:d3:85:bb:09:d3:5f:50:ab:9c:a7:08:de:fa
           requires:
             - orb-tools/publish-dev
           filters:
@@ -84,7 +84,7 @@ workflows:
       - orb-tools/trigger-integration-workflow:
           name: trigger-integration-master
           cleanup-tags: true
-          ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
+          ssh-fingerprints: 07:33:2a:d3:85:bb:09:d3:5f:50:ab:9c:a7:08:de:fa
           tag: master
           requires:
             - orb-tools/publish-dev
@@ -117,7 +117,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: dev-promote-patch
           orb-name: circleci/sumologic
-          ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
+          ssh-fingerprints: 07:33:2a:d3:85:bb:09:d3:5f:50:ab:9c:a7:08:de:fa
           cleanup-tags: true
           requires: *prod-deploy_requires
           filters:
@@ -130,7 +130,7 @@ workflows:
           name: dev-promote-minor
           release: minor
           orb-name: circleci/sumologic
-          ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
+          ssh-fingerprints: 07:33:2a:d3:85:bb:09:d3:5f:50:ab:9c:a7:08:de:fa
           cleanup-tags: true
           requires: *prod-deploy_requires
           filters:
@@ -143,7 +143,7 @@ workflows:
           name: dev-promote-major
           release: major
           orb-name: circleci/sumologic
-          ssh-fingerprints: 97:c9:c2:9e:1b:04:ee:ee:99:4d:6b:f7:ce:e0:00:78
+          ssh-fingerprints: 07:33:2a:d3:85:bb:09:d3:5f:50:ab:9c:a7:08:de:fa
           cleanup-tags: true
           requires: *prod-deploy_requires
           filters:
