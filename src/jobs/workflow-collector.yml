@@ -75,7 +75,7 @@ steps:
           mkdir -p /tmp/sumologic-logs/
           WF_SL_PAYLOAD=$(curl -s "$DATA_URL" | jq '.')
           echo $WF_SL_PAYLOAD > /tmp/sumologic-logs/workflow-collector.json
-          curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
+          #curl -s -X POST -T /tmp/sumologic-logs/workflow-collector.json $<< parameters.workflow-collector >>
           # for each job in the workflow fetch the status.
           # the WF_FINISHED will be assumed true unless one of the jobs in the Workflow is still running
           # the flag will then be set back to false.
@@ -163,7 +163,7 @@ steps:
         if [[ ! -z '<< parameters.custom-data >>' ]] && echo "$CUSTOM_DATA" | jq -e;
         then
             echo "Appending custom data to the workflow data"
-            WF_SL_PAYLOAD=$(echo $WF_SL_PAYLOAD | jq -c ". +  {\"custom_data\": $CUSTOM_DATA}")
+            WF_SL_PAYLOAD=$(echo $WF_SL_PAYLOAD | jq -c ". +  {\"custom_data\": $CUSTOM_DATA} + {\"items\": $WF_ITEMS}")
         else
             echo "No valid custom data found to append to the workflow data"
         fi
