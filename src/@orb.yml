@@ -1,9 +1,8 @@
 version: 2.1
-
-description: >
-  "Report CircleCI job analytics to your SumoLogic dashboard.
-  Website: sumologic.com
-  Repo: https://github.com/CircleCI-Public/sumologic-orb"
-
 orbs:
-  jq: circleci/jq@1.9.0
+  jq: circleci/jq@2.2
+description: >
+  Report CircleCI job analytics to your SumoLogic dashboard.
+display:
+  home_url: "https://www.sumologic.com/"
+  source_url: "https://github.com/CircleCI-Public/sumologic-orb"
