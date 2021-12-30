@@ -1,36 +1,44 @@
-description: >
-  This example workflow shows a typical build, test, and deploy job in a single workflow. By adding the Sumo Logic Orb to the top of our config and including the provided "workflow-collector" job, analytics may be automatically reported to the CircleCI App for Sumo Logic. You must also setup the CircleCI App on Sumo Logic
+description: |
+    This example workflow shows a typical build, test, and deploy job in a single workflow. By adding the Sumo Logic Orb to the top of our config and including the provided "workflow-collector" job, analytics may be automatically reported to the CircleCI App for Sumo Logic. You must also setup the CircleCI App on Sumo Logic
 usage:
-  version: 2.1
-  orbs:
-    sumologic: circleci/sumologic@x.y.z
-  jobs:
-    build:
-      docker:
-        - image: cimg/node
-      steps:
-        - run: echo "This job represents a typical build job"
-    test:
-      docker:
-        - image: cimg/node
-      steps:
-        - run: echo "This job represents a typical test job"
-    deploy:
-      docker:
-        - image: cimg/node
-      steps:
-        - run: echo "This job represents a typical deploy job"
-  workflows:
-    build-test-and-deploy:
-      jobs:
-        - sumologic/workflow-collector:
-            custom-data: >
-              {"foo": "bar", "$SOME_KEY_VAR": "$SOME_VALUE_VAR"}
-        - build
-        - test:
-            requires:
-              - build
-        - deploy:
-            requires:
-              - test
-
+    version: "2.1"
+    orbs:
+        sumologic: circleci/sumologic@x.y.z
+    jobs:
+        build:
+            docker:
+                - image: cimg/node
+            steps:
+                - run: echo "This job represents a typical build job"
+                - sumologic/job-collector
+        deploy:
+            docker:
+                - image: cimg/node
+            steps:
+                - run: echo "This job represents a typical deploy job"
+                - sumologic/job-collector:
+                    environment: dev
+                    team: APPS
+                    service: Solutions
+        test:
+            docker:
+                - image: cimg/node
+            steps:
+                - run: echo "This job represents a typical test job"
+                - sumologic/job-collector:
+                    environment: QE
+                    team: APPS
+                    service: Solutions
+    workflows:
+        build-test-and-deploy:
+            jobs:
+                - sumologic/workflow-collector:
+                    custom-data: |
+                        {"foo": "bar", "$SOME_KEY_VAR": "$SOME_VALUE_VAR"}
+                - build
+                - test:
+                    requires:
+                        - build
+                - deploy:
+                    requires:
+                        - test
