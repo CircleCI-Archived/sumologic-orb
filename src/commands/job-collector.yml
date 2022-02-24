@@ -68,6 +68,5 @@ steps:
             fi
             echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
             curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
-            echo $JOB_DATA_RAW
             echo "Job details sent to Sumo."
             
