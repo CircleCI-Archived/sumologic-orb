@@ -10,7 +10,6 @@ usage:
                 - image: cimg/node
             steps:
                 - run: echo "This job represents a typical build job"
-                - sumologic/job-collector
         deploy:
             docker:
                 - image: cimg/node
