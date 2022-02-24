@@ -54,9 +54,9 @@ steps:
             # manually set job name as it is currently null
             JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
             JOB_CUSTOM_DATA=$( jq -n \
-                                --arg en "$ENV" \
-                                --arg tm "$TEAM" \
-                                --arg sv "$SERVICE" \
+                                --arg en "$<< parameters.environment >>" \
+                                --arg tm "$<< parameters.team >>" \
+                                --arg sv "$<< parameters.service >>" \
                                 '{environment: $en, team: $tm, service: $sv}' )
             # Append any custom data to the job data
             if [ ! -z "$JOB_CUSTOM_DATA" ]
