@@ -108,12 +108,6 @@ steps:
                             JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq --arg JOBNAME "$JOB_NAME" '.job_name = $JOBNAME')
                             # removing steps and circle_yml keys from object
                             JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq 'del(.circle_yml)' | jq 'del(.steps)')
-                            JOB_CUSTOM_DATA=$( jq -n \
-                                                --arg en "" \
-                                                --arg tm "" \
-                                                --arg sv "" \
-                                                '{environment: $en, team: $tm, service: $sv}' )
-                            JOB_DATA_RAW=$(echo $JOB_DATA_RAW | jq -c ". +  {\"custom_data\": $JOB_CUSTOM_DATA}")
                             echo $JOB_DATA_RAW > /tmp/sumologic-logs/job-collector.json
                             curl -s -X POST -T /tmp/sumologic-logs/job-collector.json $<< parameters.job-collector >>
                         fi
